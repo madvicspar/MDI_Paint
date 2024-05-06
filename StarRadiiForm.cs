@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace MDI_Paint
 {
-    public partial class StarRadiosForm : Form
+    public partial class StarRadiiForm : Form
     {
         private int _innerRadii;
         public int InnerRadii
@@ -17,7 +17,7 @@ namespace MDI_Paint
             get { return _outerRadii; }
             set { _outerRadii = value; }
         }
-        public StarRadiosForm()
+        public StarRadiiForm()
         {
             InitializeComponent();
             InnerRadii = MyPaintMainForm.innerRadii;

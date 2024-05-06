@@ -1,6 +1,6 @@
 ﻿namespace MDI_Paint
 {
-    partial class StarRadiosForm
+    partial class StarRadiiForm
     {
         /// <summary>
         /// Required designer variable.

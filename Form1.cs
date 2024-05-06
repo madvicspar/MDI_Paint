@@ -452,7 +452,7 @@ namespace MDI_Paint
 
         private void внутреннийРадиусToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            StarRadiosForm form = new StarRadiosForm();
+            StarRadiiForm form = new StarRadiiForm();
             form.MdiParent = this;
             form.Show();
         }

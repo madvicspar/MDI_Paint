@@ -61,11 +61,11 @@
     <Compile Include="CanvasSize.Designer.cs">
       <DependentUpon>CanvasSize.cs</DependentUpon>
     </Compile>
-    <Compile Include="StarRadiosForm.cs">
+    <Compile Include="StarRadiiForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StarRadiosForm.Designer.cs">
-      <DependentUpon>StarRadiosForm.cs</DependentUpon>
+    <Compile Include="StarRadiiForm.Designer.cs">
+      <DependentUpon>StarRadiiForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DocumentForm.cs">
       <SubType>Form</SubType>
@@ -103,8 +103,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="StarRadiosForm.resx">
-      <DependentUpon>StarRadiosForm.cs</DependentUpon>
+    <EmbeddedResource Include="StarRadiiForm.resx">
+      <DependentUpon>StarRadiiForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
