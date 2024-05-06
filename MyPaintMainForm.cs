@@ -67,8 +67,7 @@ namespace MDI_Paint
             DialogResult dlg = MessageBox.Show("Выйти?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dlg == DialogResult.No)
                 return false;
-            DocumentForm form = ActiveMdiChild as DocumentForm;
-            if (form == null)
+            if (!(ActiveMdiChild is DocumentForm form))
             {
                 Environment.Exit(0);
             }
@@ -80,8 +79,6 @@ namespace MDI_Paint
                     case DialogResult.Yes:
                         if (!Save(form))
                             return false;
-                        break;
-                        Environment.Exit(0);
                         break;
                     case DialogResult.No:
                         Environment.Exit(0);
@@ -100,17 +97,21 @@ namespace MDI_Paint
 
         private void новыйToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var documentForm = new DocumentForm();
-            documentForm.MdiParent = this;
+            var documentForm = new DocumentForm
+            {
+                MdiParent = this
+            };
             documentForm.Show();
             CheckActiveForms();
         }
 
         private void размерХолстаToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var canvassSize = new CanvasSizeForm();
-            canvassSize.MdiParent = this;
-            canvassSize.Form = ActiveMdiChild as DocumentForm;
+            var canvassSize = new CanvasSizeForm
+            {
+                MdiParent = this,
+                Form = ActiveMdiChild as DocumentForm
+            };
             canvassSize.Show();
         }
 
@@ -188,10 +189,12 @@ namespace MDI_Paint
         {
             if (documentForm.fileName == "")
             {
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.AddExtension = true;
-                dialog.Filter = "Windows Bitmap (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg";
-                dialog.FileName = "Безымянный";
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    AddExtension = true,
+                    Filter = "Windows Bitmap (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg",
+                    FileName = "Безымянный"
+                };
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -236,14 +239,16 @@ namespace MDI_Paint
         }
         private void вФорматеBMPbmpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ActiveMdiChild != null && ActiveMdiChild is DocumentForm)
+            if (ActiveMdiChild != null && ActiveMdiChild is DocumentForm form)
             {
-                DocumentForm documentForm = (DocumentForm)ActiveMdiChild;
+                DocumentForm documentForm = form;
 
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.AddExtension = true;
-                dialog.Filter = "Windows Bitmap (*.bmp)|*.bmp";
-                dialog.FileName = "Безымянный.bmp";
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    AddExtension = true,
+                    Filter = "Windows Bitmap (*.bmp)|*.bmp",
+                    FileName = "Безымянный.bmp"
+                };
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -273,12 +278,14 @@ namespace MDI_Paint
 
         private void вФорматеJPGToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ActiveMdiChild != null && ActiveMdiChild is DocumentForm)
+            if (ActiveMdiChild != null && ActiveMdiChild is DocumentForm form)
             {
-                DocumentForm documentForm = (DocumentForm)ActiveMdiChild;
+                DocumentForm documentForm = form;
 
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.AddExtension = true;
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    AddExtension = true
+                };
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -291,16 +298,19 @@ namespace MDI_Paint
 
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "Windows Bitmap (*.bmp)|*.bmp| Файлы JPEG (*.jpeg, *.jpg)|*.jpeg;*.jpg|Все файлы ()*.*|*.*";
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Filter = "Windows Bitmap (*.bmp)|*.bmp| Файлы JPEG (*.jpeg, *.jpg)|*.jpeg;*.jpg|Все файлы ()*.*|*.*"
+            };
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 Bitmap openedBitmap = new Bitmap(dlg.FileName);
-                DocumentForm document = new DocumentForm();
-                document.MdiParent = this;
+                DocumentForm document = new DocumentForm
+                {
+                    MdiParent = this,
 
-                document.fileName = dlg.FileName;
-                //document.fileName = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(dlg.FileName));
+                    fileName = dlg.FileName
+                };
                 document.CreatePictureBox(openedBitmap.Width, openedBitmap.Height);
                 document.OpenBitmap(openedBitmap);
                 document.Show();
@@ -339,8 +349,7 @@ namespace MDI_Paint
 
         private void MyOnPropertyChanged()
         {
-            var form = ActiveMdiChild as DocumentForm;
-            if (form != null && Scale >= 0.25)
+            if (ActiveMdiChild is DocumentForm form && Scale >= 0.25)
             {
                 if (Scale == 0.25)
                 {
@@ -453,8 +462,10 @@ namespace MDI_Paint
 
         private void внутреннийРадиусToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            StarRadiiForm form = new StarRadiiForm();
-            form.MdiParent = this;
+            StarRadiiForm form = new StarRadiiForm
+            {
+                MdiParent = this
+            };
             form.Show();
         }
 

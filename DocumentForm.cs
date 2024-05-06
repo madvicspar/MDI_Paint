@@ -13,7 +13,7 @@ namespace MDI_Paint
         private int X { get; set; }
         private int Y { get; set; }
 
-        private PictureBox PictureBox;
+        private readonly PictureBox PictureBox;
         public string fileName = "";
         public ImageFormat imageFormat = ImageFormat.Bmp;
         public DocumentForm()
@@ -35,7 +35,7 @@ namespace MDI_Paint
             if (e.Button == MouseButtons.Left)
             {
                 Graphics g = Graphics.FromImage(PictureBox.Image);
-                Pen pen = new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width);
+                Pen pen;
                 switch (MyPaintMainForm.Tool)
                 {
                     case Tools.pen:
@@ -151,12 +151,14 @@ namespace MDI_Paint
 
         public PictureBox CreatePictureBox(int width, int height)
         {
-            PictureBox newPictureBox = new PictureBox();
-            newPictureBox.Image = CreateBitmap(width, height);
-            newPictureBox.Size = new Size(width, height);
-            newPictureBox.Dock = DockStyle.None;
-            newPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            newPictureBox.BackColor = Color.White;
+            PictureBox newPictureBox = new PictureBox
+            {
+                Image = CreateBitmap(width, height),
+                Size = new Size(width, height),
+                Dock = DockStyle.None,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.White
+            };
 
             return newPictureBox;
         }
@@ -169,7 +171,7 @@ namespace MDI_Paint
         private void DocumentForm_MouseUp(object sender, MouseEventArgs e)
         {
             Graphics g = Graphics.FromImage(PictureBox.Image);
-            Pen pen = new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width);
+            Pen pen;
             switch (MyPaintMainForm.Tool)
             {
                 case Tools.pen:

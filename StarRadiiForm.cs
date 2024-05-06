@@ -86,7 +86,7 @@ namespace MDI_Paint
             return true;
         }
 
-        private void TextBox_Leave(object sender, EventArgs e, TextBox textBox, ref int radius)
+        private void TextBox_Leave(TextBox textBox, ref int radius)
         {
             if (CheckRadiiValue(textBox, ref radius))
                 textBox.Text = radius.ToString();
@@ -95,14 +95,14 @@ namespace MDI_Paint
         private void textBox_OuterRadii_Leave(object sender, EventArgs e)
         {
             int radios = OuterRadii;
-            TextBox_Leave(sender, e, textBox_OuterRadii, ref radios);
+            TextBox_Leave(textBox_OuterRadii, ref radios);
             OuterRadii = radios;
         }
 
         private void textBox_InnerRadii_Leave(object sender, EventArgs e)
         {
             int radios = InnerRadii;
-            TextBox_Leave(sender, e, textBox_InnerRadii, ref radios);
+            TextBox_Leave(textBox_InnerRadii, ref radios);
             InnerRadii = radios;
         }
     }
