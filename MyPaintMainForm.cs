@@ -41,6 +41,7 @@ namespace MDI_Paint
         public MyPaintMainForm()
         {
             InitializeComponent();
+            StartPosition = FormStartPosition.CenterScreen;
             Color = Color.Black;
             Scale = 1;
             Width = 3;
