@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace paint_new
+namespace MDI_Paint
 {
     partial class AboutForm : Form
     {

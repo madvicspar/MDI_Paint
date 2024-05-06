@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace paint_new
+namespace MDI_Paint
 {
     public enum Tools
     {
@@ -25,8 +25,8 @@ namespace paint_new
         public static float scale;
         public static Zoom zoom { get; set; }
         public static int vertexs { get; set; }
-        public static int innerRadius { get; set; }
-        public static int outerRadius { get; set; }
+        public static int innerRadii { get; set; }
+        public static int outerRadii { get; set; }
 
         public float Scale
         {
@@ -41,13 +41,14 @@ namespace paint_new
         public MyPaintMainForm()
         {
             InitializeComponent();
+            StartPosition = FormStartPosition.CenterScreen;
             Color = Color.Black;
             Scale = 1;
             Width = 3;
             Tool = Tools.pen;
             vertexs = 5;
-            innerRadius = 25;
-            outerRadius = 50;
+            innerRadii = 25;
+            outerRadii = 50;
             toolStripTextBox_BrushSize.Text = Width.ToString();
             BlackToolStripMenuItem.Checked = true;
             каскадомToolStripMenuItem.Checked = true;
@@ -66,8 +67,7 @@ namespace paint_new
             DialogResult dlg = MessageBox.Show("Выйти?", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (dlg == DialogResult.No)
                 return false;
-            DocumentForm form = ActiveMdiChild as DocumentForm;
-            if (form == null)
+            if (!(ActiveMdiChild is DocumentForm form))
             {
                 Environment.Exit(0);
             }
@@ -79,8 +79,6 @@ namespace paint_new
                     case DialogResult.Yes:
                         if (!Save(form))
                             return false;
-                        break;
-                        Environment.Exit(0);
                         break;
                     case DialogResult.No:
                         Environment.Exit(0);
@@ -99,17 +97,21 @@ namespace paint_new
 
         private void новыйToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var documentForm = new DocumentForm();
-            documentForm.MdiParent = this;
+            var documentForm = new DocumentForm
+            {
+                MdiParent = this
+            };
             documentForm.Show();
             CheckActiveForms();
         }
 
         private void размерХолстаToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var canvassSize = new CanvasSizeForm();
-            canvassSize.MdiParent = this;
-            canvassSize.Form = ActiveMdiChild as DocumentForm;
+            var canvassSize = new CanvasSizeForm
+            {
+                MdiParent = this,
+                Form = ActiveMdiChild as DocumentForm
+            };
             canvassSize.Show();
         }
 
@@ -187,10 +189,12 @@ namespace paint_new
         {
             if (documentForm.fileName == "")
             {
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.AddExtension = true;
-                dialog.Filter = "Windows Bitmap (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg";
-                dialog.FileName = "Безымянный";
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    AddExtension = true,
+                    Filter = "Windows Bitmap (*.bmp)|*.bmp|Файлы JPEG (*.jpg)|*.jpg",
+                    FileName = "Безымянный"
+                };
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -235,14 +239,16 @@ namespace paint_new
         }
         private void вФорматеBMPbmpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ActiveMdiChild != null && ActiveMdiChild is DocumentForm)
+            if (ActiveMdiChild != null && ActiveMdiChild is DocumentForm form)
             {
-                DocumentForm documentForm = (DocumentForm)ActiveMdiChild;
+                DocumentForm documentForm = form;
 
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.AddExtension = true;
-                dialog.Filter = "Windows Bitmap (*.bmp)|*.bmp";
-                dialog.FileName = "Безымянный.bmp";
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    AddExtension = true,
+                    Filter = "Windows Bitmap (*.bmp)|*.bmp",
+                    FileName = "Безымянный.bmp"
+                };
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -272,12 +278,14 @@ namespace paint_new
 
         private void вФорматеJPGToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ActiveMdiChild != null && ActiveMdiChild is DocumentForm)
+            if (ActiveMdiChild != null && ActiveMdiChild is DocumentForm form)
             {
-                DocumentForm documentForm = (DocumentForm)ActiveMdiChild;
+                DocumentForm documentForm = form;
 
-                SaveFileDialog dialog = new SaveFileDialog();
-                dialog.AddExtension = true;
+                SaveFileDialog dialog = new SaveFileDialog
+                {
+                    AddExtension = true
+                };
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -290,16 +298,19 @@ namespace paint_new
 
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "Windows Bitmap (*.bmp)|*.bmp| Файлы JPEG (*.jpeg, *.jpg)|*.jpeg;*.jpg|Все файлы ()*.*|*.*";
+            OpenFileDialog dlg = new OpenFileDialog
+            {
+                Filter = "Windows Bitmap (*.bmp)|*.bmp| Файлы JPEG (*.jpeg, *.jpg)|*.jpeg;*.jpg|Все файлы ()*.*|*.*"
+            };
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 Bitmap openedBitmap = new Bitmap(dlg.FileName);
-                DocumentForm document = new DocumentForm();
-                document.MdiParent = this;
+                DocumentForm document = new DocumentForm
+                {
+                    MdiParent = this,
 
-                document.fileName = dlg.FileName;
-                //document.fileName = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(dlg.FileName));
+                    fileName = dlg.FileName
+                };
                 document.CreatePictureBox(openedBitmap.Width, openedBitmap.Height);
                 document.OpenBitmap(openedBitmap);
                 document.Show();
@@ -338,8 +349,7 @@ namespace paint_new
 
         private void MyOnPropertyChanged()
         {
-            var form = ActiveMdiChild as DocumentForm;
-            if (form != null && Scale >= 0.25)
+            if (ActiveMdiChild is DocumentForm form && Scale >= 0.25)
             {
                 if (Scale == 0.25)
                 {
@@ -452,8 +462,10 @@ namespace paint_new
 
         private void внутреннийРадиусToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            StarRadiosForm form = new StarRadiosForm();
-            form.MdiParent = this;
+            StarRadiiForm form = new StarRadiiForm
+            {
+                MdiParent = this
+            };
             form.Show();
         }
 

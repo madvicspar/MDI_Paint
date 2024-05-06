@@ -4,36 +4,38 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-namespace paint_new
+namespace MDI_Paint
 {
     public partial class DocumentForm : Form
     {
-        public int width;
-        public int height;
-        private int x, y;
-        private PictureBox pictureBox;
+        public int Width { get; set; }
+        public int Height { get; set; }
+        private int X { get; set; }
+        private int Y { get; set; }
+
+        private readonly PictureBox PictureBox;
         public string fileName = "";
         public ImageFormat imageFormat = ImageFormat.Bmp;
         public DocumentForm()
         {
             InitializeComponent();
-            width = 300;
-            height = 200;
-            pictureBox = CreatePictureBox(width, height);
+            Width = 300;
+            Height = 200;
+            PictureBox = CreatePictureBox(Width, Height);
         }
 
         private void DocumentForm_MouseDown(object sender, MouseEventArgs e)
         {
-            x = e.X;
-            y = e.Y;
+            X = e.X;
+            Y = e.Y;
         }
 
         private void DocumentForm_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                Graphics g = Graphics.FromImage(pictureBox.Image);
-                Pen pen = new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width);
+                Graphics g = Graphics.FromImage(PictureBox.Image);
+                Pen pen;
                 switch (MyPaintMainForm.Tool)
                 {
                     case Tools.pen:
@@ -41,11 +43,11 @@ namespace paint_new
 
                         pen = new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width * 2);
 
-                        g.DrawLine(pen, new Point(x, y), new Point(e.X, e.Y));
+                        g.DrawLine(pen, new Point(X, Y), new Point(e.X, e.Y));
                         g.FillEllipse(pen.Brush, e.X - MyPaintMainForm.Width, e.Y - MyPaintMainForm.Width, MyPaintMainForm.Width * 2, MyPaintMainForm.Width * 2);
 
-                        x = e.X;
-                        y = e.Y;
+                        X = e.X;
+                        Y = e.Y;
                         Refresh();
                         break;
 
@@ -53,19 +55,19 @@ namespace paint_new
                         Refresh();
                         pen = new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width);
                         g = CreateGraphics();
-                        g.DrawLine(pen, x, y, e.X, e.Y);
+                        g.DrawLine(pen, X, Y, e.X, e.Y);
                         break;
 
                     case Tools.ellipse:
                         g = CreateGraphics();
                         pen = new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width);
-                        g.DrawEllipse(pen, e.X, e.Y, x - e.X, y - e.Y);
+                        g.DrawEllipse(pen, e.X, e.Y, X - e.X, Y - e.Y);
                         Refresh();
                         break;
 
                     case Tools.star:
-                        x = e.X;
-                        y = e.Y;
+                        X = e.X;
+                        Y = e.Y;
                         Refresh();
                         break;
                     case Tools.eraser:
@@ -74,15 +76,15 @@ namespace paint_new
 
                         pen = new Pen(Color.White, MyPaintMainForm.Width * 2);
 
-                        if (x != -1 && y != -1)
+                        if (X != -1 && Y != -1)
                         {
-                            g.DrawLine(pen, new Point(x, y), new Point(e.X, e.Y));
+                            g.DrawLine(pen, new Point(X, Y), new Point(e.X, e.Y));
                         }
 
                         g.FillEllipse(Brushes.White, e.X - MyPaintMainForm.Width, e.Y - MyPaintMainForm.Width, MyPaintMainForm.Width * 2, MyPaintMainForm.Width * 2);
 
-                        x = e.X;
-                        y = e.Y;
+                        X = e.X;
+                        Y = e.Y;
                         Refresh();
                         break;
                 }
@@ -92,15 +94,15 @@ namespace paint_new
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            e.Graphics.DrawImage(pictureBox.Image, 0, 0);
+            e.Graphics.DrawImage(PictureBox.Image, 0, 0);
         }
 
         public void ChangeCanvasSize(int width, int height)
         {
-            Bitmap previousBitmap = new Bitmap(pictureBox.Image);
+            Bitmap previousBitmap = new Bitmap(PictureBox.Image);
 
-            pictureBox.Image = CreateBitmap(width, height);
-            using (Graphics graphics = Graphics.FromImage(pictureBox.Image))
+            PictureBox.Image = CreateBitmap(width, height);
+            using (Graphics graphics = Graphics.FromImage(PictureBox.Image))
             {
                 graphics.DrawImage(previousBitmap, 0, 0);
             }
@@ -115,22 +117,22 @@ namespace paint_new
                 scale = 1.25f;
             else
                 scale = 0.75f;
-            Bitmap zoomPicture = new Bitmap((int)(width * scale), (int)(height * scale));
+            Bitmap zoomPicture = new Bitmap((int)(Width * scale), (int)(Height * scale));
 
             using (Graphics g = Graphics.FromImage(zoomPicture))
             {
                 g.InterpolationMode = InterpolationMode.NearestNeighbor;
                 g.DrawImage(
-                    pictureBox.Image,
-                    new Rectangle(0, 0, (int)(pictureBox.Image.Width * scale), (int)(pictureBox.Image.Height * scale)),
-                    new Rectangle(0, 0, width, height),
+                    PictureBox.Image,
+                    new Rectangle(0, 0, (int)(PictureBox.Image.Width * scale), (int)(PictureBox.Image.Height * scale)),
+                    new Rectangle(0, 0, Width, Height),
                     GraphicsUnit.Pixel
                 );
             }
-            pictureBox.Image = zoomPicture;
+            PictureBox.Image = zoomPicture;
 
-            width = zoomPicture.Width;
-            height = zoomPicture.Height;
+            Width = zoomPicture.Width;
+            Height = zoomPicture.Height;
 
             MyPaintMainForm.Width *= scale;
 
@@ -149,25 +151,27 @@ namespace paint_new
 
         public PictureBox CreatePictureBox(int width, int height)
         {
-            PictureBox newPictureBox = new PictureBox();
-            newPictureBox.Image = CreateBitmap(width, height);
-            newPictureBox.Size = new Size(width, height);
-            newPictureBox.Dock = DockStyle.None;
-            newPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            newPictureBox.BackColor = Color.White;
+            PictureBox newPictureBox = new PictureBox
+            {
+                Image = CreateBitmap(width, height),
+                Size = new Size(width, height),
+                Dock = DockStyle.None,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                BackColor = Color.White
+            };
 
             return newPictureBox;
         }
 
         public PictureBox GetCanvasBitmap()
         {
-            return pictureBox;
+            return PictureBox;
         }
 
         private void DocumentForm_MouseUp(object sender, MouseEventArgs e)
         {
-            Graphics g = Graphics.FromImage(pictureBox.Image);
-            Pen pen = new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width);
+            Graphics g = Graphics.FromImage(PictureBox.Image);
+            Pen pen;
             switch (MyPaintMainForm.Tool)
             {
                 case Tools.pen:
@@ -175,30 +179,30 @@ namespace paint_new
 
                     pen = new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width * 2);
 
-                    g.DrawLine(pen, new Point(x, y), new Point(e.X, e.Y));
+                    g.DrawLine(pen, new Point(X, Y), new Point(e.X, e.Y));
                     g.FillEllipse(pen.Brush, e.X - MyPaintMainForm.Width, e.Y - MyPaintMainForm.Width, MyPaintMainForm.Width * 2, MyPaintMainForm.Width * 2);
 
-                    x = e.X;
-                    y = e.Y;
+                    X = e.X;
+                    Y = e.Y;
                     Refresh();
                     break;
 
                 case Tools.line:
-                    g.DrawLine(new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width), x, y, e.X, e.Y);
-                    x = e.X;
-                    y = e.Y;
+                    g.DrawLine(new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width), X, Y, e.X, e.Y);
+                    X = e.X;
+                    Y = e.Y;
                     break;
 
                 case Tools.ellipse:
-                    g.DrawEllipse(new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width), e.X, e.Y, x - e.X, y - e.Y);
+                    g.DrawEllipse(new Pen(MyPaintMainForm.Color, MyPaintMainForm.Width), e.X, e.Y, X - e.X, Y - e.Y);
 
-                    x = e.X;
-                    y = e.Y;
+                    X = e.X;
+                    Y = e.Y;
                     break;
 
                 case Tools.star:
                     int n = MyPaintMainForm.vertexs;
-                    double R = MyPaintMainForm.outerRadius, r = MyPaintMainForm.innerRadius;
+                    double R = MyPaintMainForm.outerRadii, r = MyPaintMainForm.innerRadii;
                     double beta = 0;
                     double x0 = e.X, y0 = e.Y;
                     PointF[] points = new PointF[2 * n + 1];
@@ -218,15 +222,15 @@ namespace paint_new
 
                     pen = new Pen(Color.White, MyPaintMainForm.Width * 2);
 
-                    if (x != -1 && y != -1)
+                    if (X != -1 && Y != -1)
                     {
-                        g.DrawLine(pen, new Point(x, y), new Point(e.X, e.Y));
+                        g.DrawLine(pen, new Point(X, Y), new Point(e.X, e.Y));
                     }
 
                     g.FillEllipse(Brushes.White, e.X - MyPaintMainForm.Width, e.Y - MyPaintMainForm.Width, MyPaintMainForm.Width * 2, MyPaintMainForm.Width * 2);
 
-                    x = e.X;
-                    y = e.Y;
+                    X = e.X;
+                    Y = e.Y;
                     Refresh();
                     break;
             }
@@ -266,7 +270,7 @@ namespace paint_new
 
         public bool OpenBitmap(Bitmap bmp)
         {
-            pictureBox.Image = bmp;
+            PictureBox.Image = bmp;
             return true;
         }
     }

@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7E234BAA-26D5-4B45-817D-C0326270CB48}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>paint_new</RootNamespace>
-    <AssemblyName>paint_new</AssemblyName>
+    <RootNamespace>MDI_Paint</RootNamespace>
+    <AssemblyName>MDI_Paint</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -31,6 +31,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,11 +61,11 @@
     <Compile Include="CanvasSize.Designer.cs">
       <DependentUpon>CanvasSize.cs</DependentUpon>
     </Compile>
-    <Compile Include="StarRadiosForm.cs">
+    <Compile Include="StarRadiiForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StarRadiosForm.Designer.cs">
-      <DependentUpon>StarRadiosForm.cs</DependentUpon>
+    <Compile Include="StarRadiiForm.Designer.cs">
+      <DependentUpon>StarRadiiForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DocumentForm.cs">
       <SubType>Form</SubType>
@@ -70,11 +73,11 @@
     <Compile Include="DocumentForm.Designer.cs">
       <DependentUpon>DocumentForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="MyPaintMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="MyPaintMainForm.Designer.cs">
+      <DependentUpon>MyPaintMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,8 +90,9 @@
     <EmbeddedResource Include="DocumentForm.resx">
       <DependentUpon>DocumentForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="MyPaintMainForm.resx">
+      <DependentUpon>MyPaintMainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -98,9 +102,10 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="StarRadiosForm.resx">
-      <DependentUpon>StarRadiosForm.cs</DependentUpon>
+    <EmbeddedResource Include="StarRadiiForm.resx">
+      <DependentUpon>StarRadiiForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
