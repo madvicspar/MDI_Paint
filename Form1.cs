@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace paint_new
+namespace MDI_Paint
 {
     public enum Tools
     {
@@ -25,8 +25,8 @@ namespace paint_new
         public static float scale;
         public static Zoom zoom { get; set; }
         public static int vertexs { get; set; }
-        public static int innerRadius { get; set; }
-        public static int outerRadius { get; set; }
+        public static int innerRadii { get; set; }
+        public static int outerRadii { get; set; }
 
         public float Scale
         {
@@ -46,8 +46,8 @@ namespace paint_new
             Width = 3;
             Tool = Tools.pen;
             vertexs = 5;
-            innerRadius = 25;
-            outerRadius = 50;
+            innerRadii = 25;
+            outerRadii = 50;
             toolStripTextBox_BrushSize.Text = Width.ToString();
             BlackToolStripMenuItem.Checked = true;
             каскадомToolStripMenuItem.Checked = true;

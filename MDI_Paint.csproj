@@ -5,9 +5,9 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7E234BAA-26D5-4B45-817D-C0326270CB48}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>paint_new</RootNamespace>
-    <AssemblyName>paint_new</AssemblyName>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MDI_Paint</RootNamespace>
+    <AssemblyName>MDI_Paint</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -31,6 +31,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -98,6 +101,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="StarRadiosForm.resx">
       <DependentUpon>StarRadiosForm.cs</DependentUpon>

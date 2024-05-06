@@ -1,4 +1,4 @@
-﻿namespace paint_new
+﻿namespace MDI_Paint
 {
     partial class AboutForm
     {

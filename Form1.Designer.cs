@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using System;
 
-namespace paint_new
+namespace MDI_Paint
 {
     partial class MyPaintMainForm
     {

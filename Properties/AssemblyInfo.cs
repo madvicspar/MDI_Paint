@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("LabWork Software Development")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HSE RIS-22-1")]
-[assembly: AssemblyProduct("paint_new")]
+[assembly: AssemblyProduct("MDI_Paint")]
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

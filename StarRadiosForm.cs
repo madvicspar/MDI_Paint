@@ -1,36 +1,48 @@
 ﻿using System;
-using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-namespace paint_new
+namespace MDI_Paint
 {
     public partial class StarRadiosForm : Form
     {
-        private static int Width { get; set; }
-        private static int Height { get; set; }
+        private int _innerRadii;
+        public int InnerRadii
+        {
+            get { return _innerRadii; }
+            set { _innerRadii = value; }
+        }
+        private int _outerRadii;
+        public int OuterRadii
+        {
+            get { return _outerRadii; }
+            set { _outerRadii = value; }
+        }
         public StarRadiosForm()
         {
             InitializeComponent();
-            textBox_Width.Text = MyPaintMainForm.innerRadius.ToString();
-            textBox_Height.Text = MyPaintMainForm.outerRadius.ToString();
+            InnerRadii = MyPaintMainForm.innerRadii;
+            OuterRadii = MyPaintMainForm.outerRadii;
+
+            textBox_InnerRadii.Text = InnerRadii.ToString();
+            textBox_OuterRadii.Text = OuterRadii.ToString();
         }
 
-        private void button_SaveRadios_Click(object sender, EventArgs e)
+        private void button_SaveRadii_Click(object sender, EventArgs e)
         {
-            if (Width != 0 && Height != 0)
+            if (InnerRadii != 0 && OuterRadii != 0)
             {
-                MyPaintMainForm.innerRadius = Width;
-                MyPaintMainForm.outerRadius = Height;
+                MyPaintMainForm.innerRadii = InnerRadii;
+                MyPaintMainForm.outerRadii = OuterRadii;
                 this.Close();
             }
         }
 
-        private void button_CancelRadios_Click(object sender, EventArgs e)
+        private void button_CancelRadii_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void textBox_Inner_Radios_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBox_InnerRadii_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
@@ -38,18 +50,19 @@ namespace paint_new
             }
         }
 
-        private void textBox_Inner_Radios_KeyDown(object sender, KeyEventArgs e)
+        private void textBox_InnerRadii_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (CheckInnerRadiosValue())
-                    Width = int.Parse(textBox_Width.Text);
-
+                int radios = InnerRadii;
+                if (CheckRadiiValue(textBox_InnerRadii, ref radios))
+                    textBox_InnerRadii.Text = InnerRadii.ToString();
+                InnerRadii = radios;
                 e.Handled = true;
             }
         }
 
-        private void textBox_Outer_Radios_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBox_OuterRadii_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
@@ -57,47 +70,50 @@ namespace paint_new
             }
         }
 
-        private void textBox_Outer_Radios_KeyDown(object sender, KeyEventArgs e)
+        private void textBox_OuterRadii_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (CheckOuterRadiosValue())
-                    Height = int.Parse(textBox_Height.Text);
+                int radios = OuterRadii;
+                if (CheckRadiiValue(textBox_OuterRadii, ref radios))
+                    textBox_OuterRadii.Text = OuterRadii.ToString();
+                OuterRadii = radios;
 
                 e.Handled = true;
             }
         }
-        public bool CheckOuterRadiosValue()
+
+        private bool CheckRadiiValue(TextBox textBox, ref int radius)
         {
-            label_Height.Text = "Внешний радиус:";
-            if (textBox_Height.Text == "")
+            if (string.IsNullOrWhiteSpace(textBox.Text))
             {
-                label_Height.Text += " (Введите внешний радиус!)";
+                MessageBox.Show($"Пожалуйста, введите значение радиуса для {textBox.Tag}.");
+                textBox.Focus();
                 return false;
             }
-            return true;
-        }
-        public bool CheckInnerRadiosValue()
-        {
-            label_Width.Text = "Внутренний радиус:";
-            if (textBox_Width.Text == "")
-            {
-                label_Width.Text += " (Введите внутренний радиус!)";
-                return false;
-            }
+
+            radius = int.Parse(textBox.Text);
             return true;
         }
 
-        private void textBox_Outer_Radios_Leave(object sender, EventArgs e)
+        private void TextBox_Leave(object sender, EventArgs e, TextBox textBox, ref int radius)
         {
-            if (CheckOuterRadiosValue())
-                Height = int.Parse(textBox_Height.Text);
+            if (CheckRadiiValue(textBox, ref radius))
+                textBox.Text = radius.ToString();
         }
 
-        private void textBox_Inner_Radios_Leave(object sender, EventArgs e)
+        private void textBox_OuterRadii_Leave(object sender, EventArgs e)
         {
-            if (CheckInnerRadiosValue())
-                Width = int.Parse(textBox_Width.Text);
+            int radios = OuterRadii;
+            TextBox_Leave(sender, e, textBox_OuterRadii, ref radios);
+            OuterRadii = radios;
+        }
+
+        private void textBox_InnerRadii_Leave(object sender, EventArgs e)
+        {
+            int radios = InnerRadii;
+            TextBox_Leave(sender, e, textBox_InnerRadii, ref radios);
+            InnerRadii = radios;
         }
     }
 }

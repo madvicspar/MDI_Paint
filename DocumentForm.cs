@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
-namespace paint_new
+namespace MDI_Paint
 {
     public partial class DocumentForm : Form
     {
@@ -198,7 +198,7 @@ namespace paint_new
 
                 case Tools.star:
                     int n = MyPaintMainForm.vertexs;
-                    double R = MyPaintMainForm.outerRadius, r = MyPaintMainForm.innerRadius;
+                    double R = MyPaintMainForm.outerRadii, r = MyPaintMainForm.innerRadii;
                     double beta = 0;
                     double x0 = e.X, y0 = e.Y;
                     PointF[] points = new PointF[2 * n + 1];

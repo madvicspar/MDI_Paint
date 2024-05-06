@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace paint_new
+namespace MDI_Paint
 {
     public partial class CanvasSizeForm : Form
     {
