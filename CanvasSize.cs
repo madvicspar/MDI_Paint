@@ -5,8 +5,8 @@ namespace MDI_Paint
 {
     public partial class CanvasSizeForm : Form
     {
-        private static int Width { get; set; }
-        private static int Height { get; set; }
+        private int Width { get; set; }
+        private int Height { get; set; }
         public DocumentForm Form { get; set; }
         public CanvasSizeForm()
         {
@@ -15,7 +15,7 @@ namespace MDI_Paint
 
         private void button_SaveSize_Click(object sender, EventArgs e)
         {
-            if (Width != 0 && Height != 0)
+            if (Width > 0 && Height > 0)
             {
                 Form.ChangeCanvasSize(Width, Height);
                 Form.Invalidate();
@@ -100,8 +100,8 @@ namespace MDI_Paint
 
         private void CanvasSizeForm_Load(object sender, EventArgs e)
         {
-            textBox_Width.Text = Form.width.ToString();
-            textBox_Height.Text = Form.height.ToString();
+            textBox_Width.Text = Form.Width.ToString();
+            textBox_Height.Text = Form.Height.ToString();
         }
     }
 }
