@@ -5,18 +5,8 @@ namespace MDI_Paint
 {
     public partial class StarRadiiForm : Form
     {
-        private int _innerRadii;
-        public int InnerRadii
-        {
-            get { return _innerRadii; }
-            set { _innerRadii = value; }
-        }
-        private int _outerRadii;
-        public int OuterRadii
-        {
-            get { return _outerRadii; }
-            set { _outerRadii = value; }
-        }
+        public int InnerRadii { get; set; }
+        public int OuterRadii { get; set; }
         public StarRadiiForm()
         {
             InitializeComponent();
