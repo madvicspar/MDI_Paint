@@ -271,7 +271,7 @@ namespace MDI_Paint
 
         public bool OpenBitmap(Bitmap bmp)
         {
-            PictureBox.Image = bmp;
+            PictureBox.Image = new Bitmap(bmp);
             return true;
         }
 

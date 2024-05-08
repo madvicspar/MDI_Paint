@@ -39,6 +39,9 @@
     <Reference Include="PluginInterface">
       <HintPath>..\PluginInterface\bin\Debug\PluginInterface.dll</HintPath>
     </Reference>
+    <Reference Include="PrewittPlugin">
+      <HintPath>..\PrewittPlugin\bin\Debug\PrewittPlugin.dll</HintPath>
+    </Reference>
     <Reference Include="ReversePlugin">
       <HintPath>..\ReversPlugin\bin\Debug\ReversePlugin.dll</HintPath>
     </Reference>
