@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDI_Paint", "MDI_Paint\MDI_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginInterface", "PluginInterface\PluginInterface.csproj", "{BADD1DD5-B44C-489C-980F-B29A92A8E85D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReversePlugin", "ReversPlugin\ReversePlugin.csproj", "{E0B5853F-06F3-4EC4-A26E-30AECEE9827C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BADD1DD5-B44C-489C-980F-B29A92A8E85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BADD1DD5-B44C-489C-980F-B29A92A8E85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BADD1DD5-B44C-489C-980F-B29A92A8E85D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0B5853F-06F3-4EC4-A26E-30AECEE9827C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0B5853F-06F3-4EC4-A26E-30AECEE9827C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0B5853F-06F3-4EC4-A26E-30AECEE9827C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0B5853F-06F3-4EC4-A26E-30AECEE9827C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
