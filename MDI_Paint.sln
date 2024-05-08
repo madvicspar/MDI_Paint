@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReversePlugin", "ReversPlug
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrewittPlugin", "PrewittPlugin\PrewittPlugin.csproj", "{0F73E468-2D45-4429-AC69-7D156758688A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToGrayPlugin", "ToGrayPlugin\ToGrayPlugin.csproj", "{8F7AFB91-E02D-41C4-BD0C-146F97E0A155}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{0F73E468-2D45-4429-AC69-7D156758688A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F73E468-2D45-4429-AC69-7D156758688A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F73E468-2D45-4429-AC69-7D156758688A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F7AFB91-E02D-41C4-BD0C-146F97E0A155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F7AFB91-E02D-41C4-BD0C-146F97E0A155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F7AFB91-E02D-41C4-BD0C-146F97E0A155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F7AFB91-E02D-41C4-BD0C-146F97E0A155}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
