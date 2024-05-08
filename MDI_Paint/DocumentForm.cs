@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PluginInterface;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -256,7 +257,7 @@ namespace MDI_Paint
                 {
                     case DialogResult.Yes:
                         if (!MyPaintMainForm.Save(this))
-                        break;
+                            break;
                         Environment.Exit(0);
                         break;
                     case DialogResult.No:
@@ -272,6 +273,12 @@ namespace MDI_Paint
         {
             PictureBox.Image = bmp;
             return true;
+        }
+
+        public void ApplyFilter(IPlugin plugin)
+        {
+            plugin.Transform((Bitmap)PictureBox.Image);
+            PictureBox.Refresh();
         }
     }
 }
