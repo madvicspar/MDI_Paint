@@ -36,6 +36,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PluginInterface">
+      <HintPath>..\PluginInterface\bin\Debug\PluginInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="ReversePlugin">
+      <HintPath>..\ReversPlugin\bin\Debug\ReversePlugin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

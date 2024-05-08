@@ -1,9 +1,10 @@
-﻿using System;
+﻿using PluginInterface;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace MDI_Paint
@@ -17,8 +18,10 @@ namespace MDI_Paint
     {
         zoomIn, zoomOut
     }
+
     public partial class MyPaintMainForm : Form
     {
+        Dictionary<string, IPlugin> plugins = new Dictionary<string, IPlugin>();
         public static Color Color { get; set; }
         public static float Width { get; set; }
         public static Tools Tool { get; set; }
@@ -55,6 +58,8 @@ namespace MDI_Paint
             toolStripButton1.Checked = true;
             toolStripTextBox2.Text = vertexs.ToString();
             CheckActiveForms();
+            FindPlugins();
+            CreatePluginsMenu();
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -492,5 +497,56 @@ namespace MDI_Paint
             toolStripButton5.Checked = false;
             toolStripButton1.Checked = false;
         }
+
+        #region PluginsWork
+
+        void FindPlugins()
+        {
+            // папка с плагинами
+            string folder = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            // dll-файлы в этой папке
+            string[] files = Directory.GetFiles(folder, "*.dll");
+
+            foreach (string file in files)
+                try
+                {
+                    Assembly assembly = Assembly.LoadFile(file);
+
+                    foreach (Type type in assembly.GetTypes())
+                    {
+                        Type iface = type.GetInterface("PluginInterface.IPlugin");
+
+                        if (iface != null)
+                        {
+                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                            plugins.Add(plugin.Name, plugin);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка загрузки плагина\n" + ex.Message);
+                }
+        }
+
+        private void CreatePluginsMenu()
+        {
+            foreach (var p in plugins)
+            {
+                var item = FiltersToolStripMenuItem.DropDownItems.Add(p.Value.Name);
+                item.Click += OnPluginClick;
+            }
+        }
+
+        private void OnPluginClick(object sender, EventArgs args)
+        {
+            IPlugin plugin = plugins[((ToolStripMenuItem)sender).Text];
+            var form = ActiveMdiChild as DocumentForm;
+            form.ApplyFilter(plugin);
+            form.Invalidate();
+        }
+
+        #endregion PluginsWork
     }
 }

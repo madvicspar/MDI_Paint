@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDI_Paint", "MDI_Paint\MDI_Paint.csproj", "{7E234BAA-26D5-4B45-817D-C0326270CB48}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BADD1DD5-B44C-489C-980F-B29A92A8E85D} = {BADD1DD5-B44C-489C-980F-B29A92A8E85D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginInterface", "PluginInterface\PluginInterface.csproj", "{BADD1DD5-B44C-489C-980F-B29A92A8E85D}"
 EndProject

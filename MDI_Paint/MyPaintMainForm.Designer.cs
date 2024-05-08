@@ -68,7 +68,7 @@ namespace MDI_Paint
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripDropDownButton3 = new System.Windows.Forms.ToolStripDropDownButton();
             this.количествоЛучейToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,11 +76,12 @@ namespace MDI_Paint
             this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
             this.внутреннийРадиусToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.введитеЗначениеНижеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FiltersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip_MainForm.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -92,6 +93,7 @@ namespace MDI_Paint
             this.файлToolStripMenuItem,
             this.рисунокToolStripMenuItem,
             this.окноToolStripMenuItem,
+            this.FiltersToolStripMenuItem,
             this.справкаToolStripMenuItem});
             this.menuStrip_MainForm.Location = new System.Drawing.Point(0, 0);
             this.menuStrip_MainForm.MdiWindowListItem = this.окноToolStripMenuItem;
@@ -132,7 +134,8 @@ namespace MDI_Paint
             this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(201, 26);
             this.сохранитьToolStripMenuItem.Text = "Сохранить";
             this.сохранитьToolStripMenuItem.DropDownOpening += сохранитьToolStripMenuItem_DropDownOpening;
-            сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;            // 
+            this.сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;
+            // 
             // сохранитьКакToolStripMenuItem
             // 
             this.сохранитьКакToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -373,16 +376,15 @@ namespace MDI_Paint
             this.toolStripButton2.Text = "toolStripButton2";
             this.toolStripButton2.Click += toolStripButton2_Click;
             // 
-            // toolStripButton5
+            // toolStripButton3
             // 
-            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton5.Name = "toolStripButton5";
-            this.toolStripButton5.Size = new System.Drawing.Size(29, 24);
-            this.toolStripButton5.Text = "toolStripButton5"; 
-            this.toolStripButton5.Click += toolStripButton5_Click;
-
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton3.Text = "toolStripButton3";
+            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
             // toolStripDropDownButton3
             // 
@@ -430,6 +432,7 @@ namespace MDI_Paint
             // 
             // toolStripTextBox2
             // 
+            this.toolStripTextBox2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.toolStripTextBox2.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBox2.Name = "toolStripTextBox2";
             this.toolStripTextBox2.Size = new System.Drawing.Size(100, 27);
@@ -444,6 +447,15 @@ namespace MDI_Paint
             this.внутреннийРадиусToolStripMenuItem.Size = new System.Drawing.Size(234, 26);
             this.внутреннийРадиусToolStripMenuItem.Text = "Внутренний радиус..";
             this.внутреннийРадиусToolStripMenuItem.Click += внутреннийРадиусToolStripMenuItem_Click;
+            // 
+            // toolStripButton5
+            // 
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton5.Text = "toolStripButton5";
             // 
             // toolStripSeparator1
             // 
@@ -468,17 +480,6 @@ namespace MDI_Paint
             this.toolStripButton6.Name = "toolStripButton6";
             this.toolStripButton6.Size = new System.Drawing.Size(29, 24);
             this.toolStripButton6.Text = "toolStripButton6";
-            this.toolStripButton6.Click += toolStripButton6_Click;
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(29, 24);
-            this.toolStripButton3.Text = "toolStripButton3";
-            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
             // введитеЗначениеНижеToolStripMenuItem
             // 
@@ -487,6 +488,12 @@ namespace MDI_Paint
             this.введитеЗначениеНижеToolStripMenuItem.ShowShortcutKeys = false;
             this.введитеЗначениеНижеToolStripMenuItem.Size = new System.Drawing.Size(253, 26);
             this.введитеЗначениеНижеToolStripMenuItem.Text = "Введите значение ниже:";
+            // 
+            // FiltersToolStripMenuItem
+            // 
+            this.FiltersToolStripMenuItem.Name = "FiltersToolStripMenuItem";
+            this.FiltersToolStripMenuItem.Size = new System.Drawing.Size(85, 24);
+            this.FiltersToolStripMenuItem.Text = "Фильтры";
             // 
             // MyPaintMainForm
             // 
@@ -557,6 +564,7 @@ namespace MDI_Paint
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private ToolStripButton toolStripButton3;
         private ToolStripMenuItem введитеЗначениеНижеToolStripMenuItem;
+        private ToolStripMenuItem FiltersToolStripMenuItem;
     }
 }
 
