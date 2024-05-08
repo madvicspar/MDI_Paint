@@ -36,6 +36,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DataStringPlugin">
+      <HintPath>..\DataStringPlugin\bin\Debug\DataStringPlugin.dll</HintPath>
+    </Reference>
     <Reference Include="MedianPlugin">
       <HintPath>..\MedianPlugin\bin\Debug\MedianPlugin.dll</HintPath>
     </Reference>
