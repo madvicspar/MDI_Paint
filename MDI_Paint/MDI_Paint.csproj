@@ -36,6 +36,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MedianPlugin">
+      <HintPath>..\MedianPlugin\bin\Debug\MedianPlugin.dll</HintPath>
+    </Reference>
     <Reference Include="PluginInterface">
       <HintPath>..\PluginInterface\bin\Debug\PluginInterface.dll</HintPath>
     </Reference>
