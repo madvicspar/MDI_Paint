@@ -34,7 +34,7 @@ namespace MDI_Paint
         public static int innerRadii { get; set; }
         public static int outerRadii { get; set; }
 
-        public string PluginNames = "ReversePlugin,ToGrayPlugin,MedianPlugin,PrewittPlugin,DataStringPlugin";
+        public static string PluginNames = "ReversePlugin,ToGrayPlugin,MedianPlugin,PrewittPlugin,DataStringPlugin";
 
         public float Scale
         {
@@ -505,7 +505,86 @@ namespace MDI_Paint
 
         #region PluginsWork
 
-        void FindPlugins()
+        public static void FindPlugins()
+        {
+            plugins.Clear();
+            var pluginSettings = CheckConfigFile().AppSettings.Settings["PluginNames"].Value.Split(',');
+
+            foreach (var plugin in GetAllPlugins().Values)
+            {
+                if (pluginSettings.Contains(plugin.GetType().Name))
+                {
+                    plugins.Add(plugin.Name, plugin);
+                }
+            }
+        }
+
+        public void CreatePluginsMenu()
+        {
+            FiltersToolStripMenuItem.DropDownItems.Clear();
+            foreach (var p in plugins)
+            {
+                var item = FiltersToolStripMenuItem.DropDownItems.Add(p.Value.Name);
+                item.Click += OnPluginClick;
+            }
+            var about = FiltersToolStripMenuItem.DropDownItems.Add("Все фильтры и подробности о них");
+            about.Click += OnFiltersAboutClick;
+        }
+
+        private void OnPluginClick(object sender, EventArgs args)
+        {
+            IPlugin plugin = plugins[((ToolStripMenuItem)sender).Text];
+            var form = ActiveMdiChild as DocumentForm;
+            form.ApplyFilter(plugin);
+            form.Invalidate();
+        }
+
+        private void OnFiltersAboutClick(object sender, EventArgs args)
+        {
+            Plugins plugins = new Plugins();
+            this.Enabled = false;
+            plugins.ShowDialog();
+            this.Enabled = true;
+        }
+
+        public static Dictionary<string, IPlugin> GetAllPlugins()
+        {
+            Dictionary<string, IPlugin> allPlugins = new Dictionary<string, IPlugin>();
+            string folder = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            // dll-файлы в этой папке
+            string[] files = Directory.GetFiles(folder, "*.dll");
+
+            foreach (string file in files)
+            {
+                string pattern = @"\\([^\\]+)\.dll$"; // Регулярное выражение для извлечения названия файла без расширения .dll
+                Match match = Regex.Match(file, pattern);
+
+                string pluginName = match.Groups[1].Value;
+                try
+                {
+                    Assembly assembly = Assembly.LoadFile(file);
+
+                    foreach (Type type in assembly.GetTypes())
+                    {
+                        Type iface = type.GetInterface("PluginInterface.IPlugin");
+
+                        if (iface != null)
+                        {
+                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                            allPlugins.Add(plugin.Name, plugin);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Ошибка загрузки плагина\n" + ex.Message);
+                }
+            }
+            return allPlugins;
+        }
+
+        public static Configuration CheckConfigFile()
         {
             Configuration config;
             string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins.config");
@@ -537,60 +616,7 @@ namespace MDI_Paint
 
             // Save the changes
             config.Save();
-
-            var pluginSettings = config.AppSettings.Settings["PluginNames"].Value.Split(',');
-
-            string folder = System.AppDomain.CurrentDomain.BaseDirectory;
-
-            // dll-файлы в этой папке
-            string[] files = Directory.GetFiles(folder, "*.dll");
-
-            foreach (string file in files)
-            {
-                string pattern = @"\\([^\\]+)\.dll$"; // Регулярное выражение для извлечения названия файла без расширения .dll
-                Match match = Regex.Match(file, pattern);
-
-                string pluginName = match.Groups[1].Value;
-                if (pluginSettings.Contains(pluginName))
-                {
-                    try
-                    {
-                        Assembly assembly = Assembly.LoadFile(file);
-
-                        foreach (Type type in assembly.GetTypes())
-                        {
-                            Type iface = type.GetInterface("PluginInterface.IPlugin");
-
-                            if (iface != null)
-                            {
-                                IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                                plugins.Add(plugin.Name, plugin);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Ошибка загрузки плагина\n" + ex.Message);
-                    }
-                }
-            }
-        }
-
-        private void CreatePluginsMenu()
-        {
-            foreach (var p in plugins)
-            {
-                var item = FiltersToolStripMenuItem.DropDownItems.Add(p.Value.Name);
-                item.Click += OnPluginClick;
-            }
-        }
-
-        private void OnPluginClick(object sender, EventArgs args)
-        {
-            IPlugin plugin = plugins[((ToolStripMenuItem)sender).Text];
-            var form = ActiveMdiChild as DocumentForm;
-            form.ApplyFilter(plugin);
-            form.Invalidate();
+            return config;
         }
 
         #endregion PluginsWork
