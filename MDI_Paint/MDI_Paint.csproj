@@ -36,13 +36,23 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DataStringPlugin">
+      <HintPath>..\DataStringPlugin\bin\Debug\DataStringPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="MedianPlugin">
+      <HintPath>..\MedianPlugin\bin\Debug\MedianPlugin.dll</HintPath>
+    </Reference>
     <Reference Include="PluginInterface">
       <HintPath>..\PluginInterface\bin\Debug\PluginInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="PrewittPlugin">
+      <HintPath>..\PrewittPlugin\bin\Debug\PrewittPlugin.dll</HintPath>
     </Reference>
     <Reference Include="ReversePlugin">
       <HintPath>..\ReversPlugin\bin\Debug\ReversePlugin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,6 +63,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ToGrayPlugin">
+      <HintPath>..\ToGrayPlugin\bin\Debug\ToGrayPlugin.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutForm.cs">
@@ -66,6 +79,12 @@
     </Compile>
     <Compile Include="CanvasSize.Designer.cs">
       <DependentUpon>CanvasSize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Plugins.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Plugins.Designer.cs">
+      <DependentUpon>Plugins.cs</DependentUpon>
     </Compile>
     <Compile Include="StarRadiiForm.cs">
       <SubType>Form</SubType>
@@ -100,6 +119,9 @@
       <DependentUpon>MyPaintMainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Plugins.resx">
+      <DependentUpon>Plugins.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -113,6 +135,7 @@
     <EmbeddedResource Include="StarRadiiForm.resx">
       <DependentUpon>StarRadiiForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

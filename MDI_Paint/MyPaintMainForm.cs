@@ -1,10 +1,13 @@
 ﻿using PluginInterface;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace MDI_Paint
@@ -21,7 +24,7 @@ namespace MDI_Paint
 
     public partial class MyPaintMainForm : Form
     {
-        Dictionary<string, IPlugin> plugins = new Dictionary<string, IPlugin>();
+        public static Dictionary<string, IPlugin> plugins = new Dictionary<string, IPlugin>();
         public static Color Color { get; set; }
         public static float Width { get; set; }
         public static Tools Tool { get; set; }
@@ -502,32 +505,45 @@ namespace MDI_Paint
 
         void FindPlugins()
         {
-            // папка с плагинами
-            string folder = System.AppDomain.CurrentDomain.BaseDirectory;
+            var pluginSettings = ConfigurationManager.AppSettings["PluginNames"].Split(',');
 
-            // dll-файлы в этой папке
-            string[] files = Directory.GetFiles(folder, "*.dll");
+            if (pluginSettings != null)
+            {
+                string folder = System.AppDomain.CurrentDomain.BaseDirectory;
 
-            foreach (string file in files)
-                try
+                // dll-файлы в этой папке
+                string[] files = Directory.GetFiles(folder, "*.dll");
+
+                foreach (string file in files)
                 {
-                    Assembly assembly = Assembly.LoadFile(file);
+                    string pattern = @"\\([^\\]+)\.dll$"; // Регулярное выражение для извлечения названия файла без расширения .dll
+                    Match match = Regex.Match(file, pattern);
 
-                    foreach (Type type in assembly.GetTypes())
+                    string pluginName = match.Groups[1].Value;
+                    if (pluginSettings.Contains(pluginName))
                     {
-                        Type iface = type.GetInterface("PluginInterface.IPlugin");
-
-                        if (iface != null)
+                        try
                         {
-                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                            plugins.Add(plugin.Name, plugin);
+                            Assembly assembly = Assembly.LoadFile(file);
+
+                            foreach (Type type in assembly.GetTypes())
+                            {
+                                Type iface = type.GetInterface("PluginInterface.IPlugin");
+
+                                if (iface != null)
+                                {
+                                    IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                                    plugins.Add(plugin.Name, plugin);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Ошибка загрузки плагина\n" + ex.Message);
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка загрузки плагина\n" + ex.Message);
-                }
+            }
         }
 
         private void CreatePluginsMenu()
