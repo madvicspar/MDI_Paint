@@ -552,8 +552,10 @@ namespace MDI_Paint
             Dictionary<string, IPlugin> allPlugins = new Dictionary<string, IPlugin>();
             string folder = System.AppDomain.CurrentDomain.BaseDirectory;
 
+            string parentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(folder))) + "\\Plugins";
+
             // dll-файлы в этой папке
-            string[] files = Directory.GetFiles(folder, "*.dll");
+            string[] files = Directory.GetFiles(parentDirectory, "*.dll");
 
             foreach (string file in files)
             {
