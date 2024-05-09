@@ -34,6 +34,8 @@ namespace MDI_Paint
         public static int innerRadii { get; set; }
         public static int outerRadii { get; set; }
 
+        public string PluginNames = "ReversePlugin,ToGrayPlugin,MedianPlugin,PrewittPlugin,DataStringPlugin";
+
         public float Scale
         {
             get => scale;
@@ -505,42 +507,70 @@ namespace MDI_Paint
 
         void FindPlugins()
         {
-            var pluginSettings = ConfigurationManager.AppSettings["PluginNames"].Split(',');
-
-            if (pluginSettings != null)
+            Configuration config;
+            string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins.config");
+            //Configuration config;
+            if (!File.Exists("Plugins.config"))
             {
-                string folder = System.AppDomain.CurrentDomain.BaseDirectory;
-
-                // dll-файлы в этой папке
-                string[] files = Directory.GetFiles(folder, "*.dll");
-
-                foreach (string file in files)
+                // Create a new app.config file
+                if (!File.Exists(configFilePath))
                 {
-                    string pattern = @"\\([^\\]+)\.dll$"; // Регулярное выражение для извлечения названия файла без расширения .dll
-                    Match match = Regex.Match(file, pattern);
+                    File.WriteAllText(configFilePath, $@"<?xml version='1.0' encoding='utf-8'?>
+<configuration>
+    <appSettings>
+        <add key=""PluginNames"" value=""{PluginNames}"" />
+    </appSettings>
+</configuration>");
+                }
+            }
 
-                    string pluginName = match.Groups[1].Value;
-                    if (pluginSettings.Contains(pluginName))
+            ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
+            configFileMap.ExeConfigFilename = configFilePath;
+            config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
+
+            // Add or update values in the appSettings section
+            AppSettingsSection appSettings = config.AppSettings;
+            if (!appSettings.Settings.AllKeys.Contains("PluginNames"))
+                appSettings.Settings.Add("PluginNames", PluginNames);
+            if (appSettings.Settings["PluginNames"].Value.Split(',').Length == 1)
+                appSettings.Settings["PluginNames"].Value = PluginNames;
+
+            // Save the changes
+            config.Save();
+
+            var pluginSettings = config.AppSettings.Settings["PluginNames"].Value.Split(',');
+
+            string folder = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            // dll-файлы в этой папке
+            string[] files = Directory.GetFiles(folder, "*.dll");
+
+            foreach (string file in files)
+            {
+                string pattern = @"\\([^\\]+)\.dll$"; // Регулярное выражение для извлечения названия файла без расширения .dll
+                Match match = Regex.Match(file, pattern);
+
+                string pluginName = match.Groups[1].Value;
+                if (pluginSettings.Contains(pluginName))
+                {
+                    try
                     {
-                        try
+                        Assembly assembly = Assembly.LoadFile(file);
+
+                        foreach (Type type in assembly.GetTypes())
                         {
-                            Assembly assembly = Assembly.LoadFile(file);
+                            Type iface = type.GetInterface("PluginInterface.IPlugin");
 
-                            foreach (Type type in assembly.GetTypes())
+                            if (iface != null)
                             {
-                                Type iface = type.GetInterface("PluginInterface.IPlugin");
-
-                                if (iface != null)
-                                {
-                                    IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                                    plugins.Add(plugin.Name, plugin);
-                                }
+                                IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                                plugins.Add(plugin.Name, plugin);
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Ошибка загрузки плагина\n" + ex.Message);
-                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Ошибка загрузки плагина\n" + ex.Message);
                     }
                 }
             }
