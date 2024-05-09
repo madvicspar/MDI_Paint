@@ -34,8 +34,6 @@ namespace MDI_Paint
         public static int innerRadii { get; set; }
         public static int outerRadii { get; set; }
 
-        public static string PluginNames = "ReversePlugin,ToGrayPlugin,MedianPlugin,PrewittPlugin,DataStringPlugin";
-
         public float Scale
         {
             get => scale;
@@ -588,6 +586,7 @@ namespace MDI_Paint
 
         public static Configuration CheckConfigFile()
         {
+            string PluginNames = GetPluginsNames();
             Configuration config;
             string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins.config");
             //Configuration config;
@@ -619,6 +618,16 @@ namespace MDI_Paint
             // Save the changes
             config.Save();
             return config;
+        }
+
+        public static string GetPluginsNames()
+        {
+            string pluginNames = "";
+            foreach (var row in GetAllPlugins())
+            {
+                pluginNames += row.GetType().Name + ",";
+            }
+            return pluginNames.Trim(',');
         }
 
         #endregion PluginsWork
