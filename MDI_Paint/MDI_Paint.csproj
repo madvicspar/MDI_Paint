@@ -36,20 +36,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DataStringPlugin">
-      <HintPath>..\DataStringPlugin\bin\Debug\DataStringPlugin.dll</HintPath>
-    </Reference>
-    <Reference Include="MedianPlugin">
-      <HintPath>..\MedianPlugin\bin\Debug\MedianPlugin.dll</HintPath>
-    </Reference>
     <Reference Include="PluginInterface">
       <HintPath>..\PluginInterface\bin\Debug\PluginInterface.dll</HintPath>
-    </Reference>
-    <Reference Include="PrewittPlugin">
-      <HintPath>..\PrewittPlugin\bin\Debug\PrewittPlugin.dll</HintPath>
-    </Reference>
-    <Reference Include="ReversePlugin">
-      <HintPath>..\ReversPlugin\bin\Debug\ReversePlugin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -63,9 +51,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="ToGrayPlugin">
-      <HintPath>..\ToGrayPlugin\bin\Debug\ToGrayPlugin.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutForm.cs">
@@ -135,7 +120,6 @@
     <EmbeddedResource Include="StarRadiiForm.resx">
       <DependentUpon>StarRadiiForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="App.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -145,6 +129,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Plugins\DataStringPlugin.dll" />
+    <Content Include="Plugins\MedianPlugin.dll" />
+    <Content Include="Plugins\PrewittPlugin.dll" />
+    <Content Include="Plugins\ReversePlugin.dll" />
+    <Content Include="Plugins\ToGrayPlugin.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

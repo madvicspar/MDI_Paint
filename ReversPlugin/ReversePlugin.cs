@@ -5,7 +5,7 @@ using System.Drawing;
 namespace ReversePlugin
 {
     [Version(1, 0)]
-    public class ReverseTransform : IPlugin
+    public class ReversePlugin : IPlugin
     {
         public string Name
         {
