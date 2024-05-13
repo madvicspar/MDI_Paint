@@ -13,30 +13,14 @@ namespace MDI_Paint
         public Plugins()
         {
             InitializeComponent();
+            dataGridView1.AutoGenerateColumns = false;
+            dataGridView1.AllowUserToAddRows = false;
             LoadData();
         }
 
         public void LoadData()
         {
-            DataTable dataTable = new DataTable();
-            dataTable.Columns.Add("IsSelected", typeof(bool));
-            dataTable.Columns.Add("Название", typeof(string));
-            dataTable.Columns.Add("Автор", typeof(string));
-            dataTable.Columns.Add("Версия", typeof(string));
-
-            foreach (var plugin in MyPaintMainForm.GetAllPlugins())
-            {
-                Assembly assembly = plugin.Value.GetType().Assembly;
-                AssemblyFileVersionAttribute fileVersionAttribute = (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyFileVersionAttribute));
-                string fileVersion = fileVersionAttribute != null ? fileVersionAttribute.Version : "";
-
-                bool isDownload = MyPaintMainForm.plugins.ContainsKey(plugin.Value.Name);
-
-                dataTable.Rows.Add(isDownload, plugin.Value.Name, plugin.Value.Author, fileVersion);
-            }
-
-            dataGridView1.AutoGenerateColumns = false;
-            dataGridView1.AllowUserToAddRows = false;
+            var dataTable = GetData();
 
             DataGridViewCheckBoxColumn checkBoxColumn = new DataGridViewCheckBoxColumn
             {
@@ -58,7 +42,40 @@ namespace MDI_Paint
             }
         }
 
+        public DataTable GetData()
+        {
+
+            DataTable dataTable = new DataTable();
+            dataTable.Columns.Add("IsSelected", typeof(bool));
+            dataTable.Columns.Add("Название", typeof(string));
+            dataTable.Columns.Add("Автор", typeof(string));
+            dataTable.Columns.Add("Версия", typeof(string));
+
+            foreach (var plugin in MyPaintMainForm.GetAllPlugins())
+            {
+                Assembly assembly = plugin.Value.GetType().Assembly;
+                AssemblyFileVersionAttribute fileVersionAttribute = (AssemblyFileVersionAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyFileVersionAttribute));
+                string fileVersion = fileVersionAttribute != null ? fileVersionAttribute.Version : "";
+
+                bool isDownload = MyPaintMainForm.plugins.ContainsKey(plugin.Value.Name);
+
+                dataTable.Rows.Add(isDownload, plugin.Value.Name, plugin.Value.Author, fileVersion);
+            }
+            return dataTable;
+        }
+
         private void button1_Click(object sender, EventArgs e)
+        {
+            SaveChanges();
+
+            MyPaintMainForm.FindPlugins();
+            MyPaintMainForm mainForm = (MyPaintMainForm)Application.OpenForms["MyPaintMainForm"]; // Получаем экземпляр формы
+            mainForm.CreatePluginsMenu(); // Вызываем метод CreatePluginsMenu() для этого экземпляра
+
+            this.Close();
+        }
+
+        private string GetPluginNames()
         {
             string pluginNames = "";
             foreach (DataGridViewRow row in dataGridView1.Rows)
@@ -68,8 +85,11 @@ namespace MDI_Paint
                     pluginNames += MyPaintMainForm.GetAllPlugins().Values.First(p => p.Name == row.Cells[1].Value.ToString()).GetType().Name + ",";
                 }
             }
-            pluginNames = pluginNames.Trim(',');
+            return pluginNames.Trim(',');
+        }
 
+        private void SaveChanges()
+        {
             string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins.config");
 
             ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
@@ -78,17 +98,10 @@ namespace MDI_Paint
 
             // Add or update values in the appSettings section
             AppSettingsSection appSettings = config.AppSettings;
-            appSettings.Settings["PluginNames"].Value = pluginNames;
+            appSettings.Settings["PluginNames"].Value = GetPluginNames();
 
             // Save the changes
             config.Save();
-
-            MyPaintMainForm.FindPlugins();
-
-            MyPaintMainForm mainForm = (MyPaintMainForm)Application.OpenForms["MyPaintMainForm"]; // Получаем экземпляр формы
-            mainForm.CreatePluginsMenu(); // Вызываем метод CreatePluginsMenu() для этого экземпляра
-
-            this.Close();
         }
     }
 }
