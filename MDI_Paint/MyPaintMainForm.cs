@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -548,33 +549,16 @@ namespace MDI_Paint
         public static Dictionary<string, IPlugin> GetAllPlugins()
         {
             Dictionary<string, IPlugin> allPlugins = new Dictionary<string, IPlugin>();
-            string folder = System.AppDomain.CurrentDomain.BaseDirectory;
-
-            string parentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(folder))) + "\\Plugins";
 
             // dll-файлы в этой папке
-            string[] files = Directory.GetFiles(parentDirectory, "*.dll");
+            string[] files = GetFileNames();
 
             foreach (string file in files)
             {
-                string pattern = @"\\([^\\]+)\.dll$"; // Регулярное выражение для извлечения названия файла без расширения .dll
-                Match match = Regex.Match(file, pattern);
-
-                string pluginName = match.Groups[1].Value;
                 try
                 {
-                    Assembly assembly = Assembly.LoadFile(file);
-
-                    foreach (Type type in assembly.GetTypes())
-                    {
-                        Type iface = type.GetInterface("PluginInterface.IPlugin");
-
-                        if (iface != null)
-                        {
-                            IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
-                            allPlugins.Add(plugin.Name, plugin);
-                        }
-                    }
+                    IPlugin pl = GetPlugin(file);
+                    allPlugins.Add(pl.Name, pl);
                 }
                 catch (Exception ex)
                 {
@@ -584,40 +568,76 @@ namespace MDI_Paint
             return allPlugins;
         }
 
+        public static IPlugin GetPlugin(string file)
+        {
+            Assembly assembly = Assembly.LoadFile(file);
+
+            foreach (Type type in assembly.GetTypes())
+            {
+                Type iface = type.GetInterface("PluginInterface.IPlugin");
+
+                if (iface != null)
+                {
+                    IPlugin plugin = (IPlugin)Activator.CreateInstance(type);
+                    return plugin;
+                }
+            }
+            return null;
+        }
+
+        public static string[] GetFileNames()
+        {
+            string folder = System.AppDomain.CurrentDomain.BaseDirectory;
+            string parentDirectory = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(folder))) + "\\Plugins";
+            return Directory.GetFiles(parentDirectory, "*.dll");
+        }
+
         public static Configuration CheckConfigFile()
         {
             string PluginNames = GetPluginsNames();
-            Configuration config;
-            string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins.config");
-            //Configuration config;
-            if (!File.Exists("Plugins.config"))
+
+            var config = GetConfiguration(PluginNames);
+
+            UpdateConfig(config, PluginNames);
+            return config;
+        }
+
+        public static void CreateConfig(string configFilePath, string PluginNames)
+        {
+            if (!File.Exists(configFilePath))
             {
-                // Create a new app.config file
-                if (!File.Exists(configFilePath))
-                {
-                    File.WriteAllText(configFilePath, $@"<?xml version='1.0' encoding='utf-8'?>
+                File.WriteAllText(configFilePath, $@"<?xml version='1.0' encoding='utf-8'?>
 <configuration>
     <appSettings>
         <add key=""PluginNames"" value=""{PluginNames}"" />
     </appSettings>
 </configuration>");
-                }
             }
+        }
 
-            ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
-            configFileMap.ExeConfigFilename = configFilePath;
-            config = ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
-
-            // Add or update values in the appSettings section
+        public static void UpdateConfig(Configuration config, string PluginNames)
+        {
             AppSettingsSection appSettings = config.AppSettings;
             if (!appSettings.Settings.AllKeys.Contains("PluginNames"))
                 appSettings.Settings.Add("PluginNames", PluginNames);
             if (appSettings.Settings["PluginNames"].Value.Split(',').Length == 1)
                 appSettings.Settings["PluginNames"].Value = PluginNames;
 
-            // Save the changes
             config.Save();
-            return config;
+        }
+
+        public static Configuration GetConfiguration(string PluginNames)
+        {
+            string configFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Plugins.config");
+
+            if (!File.Exists("Plugins.config"))
+            {
+                CreateConfig(configFilePath, PluginNames);
+            }
+            ExeConfigurationFileMap configFileMap = new ExeConfigurationFileMap();
+            configFileMap.ExeConfigFilename = configFilePath;
+            // на случай других ошибок с config-файлом, поставить сюда отслеживание и перезаписывание файла
+            return ConfigurationManager.OpenMappedExeConfiguration(configFileMap, ConfigurationUserLevel.None);
         }
 
         public static string GetPluginsNames()
@@ -625,7 +645,7 @@ namespace MDI_Paint
             string pluginNames = "";
             foreach (var row in GetAllPlugins())
             {
-                pluginNames += row.GetType().Name + ",";
+                pluginNames += row.Value.GetType().Name + ",";
             }
             return pluginNames.Trim(',');
         }
